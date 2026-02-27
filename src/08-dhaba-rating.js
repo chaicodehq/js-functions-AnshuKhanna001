@@ -46,16 +46,67 @@
  */
 export function createFilter(field, operator, value) {
   // Your code here
+  return function (item) {
+    const fieldValue = item[field];
+
+    switch (operator) {
+      case ">":
+        return fieldValue > value;
+      case "<":
+        return fieldValue < value;
+      case ">=":
+        return fieldValue >= value;
+      case "<=":
+        return fieldValue <= value;
+      case "===":
+        return fieldValue === value;
+
+      default:
+        return false;
+        break;
+    }
+  };
 }
 
 export function createSorter(field, order = "asc") {
   // Your code here
+  return function (a, b) {
+    const val1 = a[field];
+    const val2 = b[field];
+
+    let result;
+
+    if (typeof val1 === "number" && typeof val2 === "number")
+      result = val1 - val2;
+    else result = String(val1).localeCompare(String(val2));
+
+    if (order === "desc") {
+      return -result;
+    }
+
+    return result;
+  };
 }
 
 export function createMapper(fields) {
   // Your code here
+  return function (item) {
+    const obj = {};
+
+    fields.forEach((field) => {
+      obj[field] = item[field];
+    });
+
+    return obj;
+  };
 }
 
 export function applyOperations(data, ...operations) {
   // Your code here
+  if (!Array.isArray(data)) return [];
+  const result = operations.reduce((acc, operation) => {
+    return operation(acc);
+  }, data);
+
+  return result;
 }

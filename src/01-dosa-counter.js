@@ -33,4 +33,49 @@
  */
 export function calculateDosaOrder(type, quantity = 1, isSpicy = false) {
   // Your code here
+  if (typeof type !== "string") return null;
+  const qty = Number(quantity);
+  if (Number.isNaN(qty) || !Number.isInteger(qty) || qty < 1) {
+    return null;
+  }
+
+  let basePrice;
+
+  switch (type) {
+    case "plain":
+      basePrice = 40;
+      break;
+    case "masala":
+      basePrice = 60;
+      break;
+    case "onion":
+      basePrice = 50;
+      break;
+    case "butter":
+      basePrice = 70;
+      break;
+    case "paper":
+      basePrice = 90;
+      break;
+    case "cheese":
+      basePrice = 80;
+      break;
+    default:
+      return null;
+  }
+
+  let pricePerDosa = basePrice;
+
+  if (isSpicy === true) {
+    pricePerDosa += 10;
+  }
+
+  const total = pricePerDosa * qty;
+
+  return {
+    type,
+    quantity: qty,
+    pricePerDosa,
+    total,
+  };
 }
